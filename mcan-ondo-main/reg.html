@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .alert-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #0d6efd;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .alert-box h2 {
+            font-size: 1.5rem;
+            color: #0d6efd;
+            margin-bottom: 20px;
+        }
+
+        .alert-box button {
+            background: #0d6efd;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="container mt-5">
+        <div class="text-center mb-5">
+            <img src="logo1.png" alt="Logo 1" class="inline-block w-16 mx-2">
+            <img src="logo2.png" alt="Logo 2" class="inline-block w-16 mx-2">
+            <img src="logo3.png" alt="Logo 3" class="inline-block w-16 mx-2">
+        </div>
+        <form id="registrationForm" class="bg-white p-5 shadow rounded-lg">
+            <h1 class="text-center text-2xl font-bold mb-4">Registration Form</h1>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="regNo" class="form-label">Reg No</label>
+                    <input type="text" id="regNo" name="regNo" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" id="firstName" name="firstName" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- Additional fields go here -->
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="alertBox" class="alert-box">
+        <h2>Registration Successful</h2>
+        <button onclick="closeAlert()">Close</button>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            // Collect form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                // Replace with your Apps Script Web App URL
+                const response = await fetch('https://script.google.com/macros/s/AKfycbyB1fagjb3PlI2dZvM4vMr3FGYYnpot5mevpmraG0mGCxT0k3pSNiIvrvaqE_-h-LYU/exec', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    // Show success alert
+                    document.getElementById('alertBox').style.display = 'block';
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Submission failed:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+
+        function closeAlert() {
+            document.getElementById('alertBox').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
